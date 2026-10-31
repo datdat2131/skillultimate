@@ -1,0 +1,45 @@
+name: AstraXUltimate
+version: '1.0.0'
+main: me.astrax.ultimate.AstraXUltimate
+api-version: '1.21'
+authors: [Astrax]
+description: Hệ thống Skill RPG cao cấp (Cast - Charge - Impact - After) cho BoxMine RPG
+
+commands:
+  ultimate:
+    description: Lệnh chính của AstraXUltimate
+    aliases: [ult]
+    usage: /ult help
+    permission: astraxultimate.use
+
+permissions:
+  astraxultimate.use:
+    description: Dùng lệnh /ult cơ bản (xem, gắn skill, tiến hóa)
+    default: true
+  astraxultimate.bypass:
+    description: Bỏ qua cooldown và quyền từng skill
+    default: op
+  astraxultimate.admin:
+    description: Quản trị AstraXUltimate
+    default: op
+    children:
+      astraxultimate.use: true
+      astraxultimate.bypass: true
+  astraxultimate.skill.meteor-fall:
+    description: Dùng skill Meteor Fall
+    default: op
+  astraxultimate.skill.thunder-judgement:
+    description: Dùng skill Thunder Judgement
+    default: op
+  astraxultimate.skill.divine-thunder:
+    description: Dùng skill Divine Thunder
+    default: op
+  astraxultimate.skill.void-breaker:
+    description: Dùng skill Void Breaker
+    default: op
+  astraxultimate.skill.dragon-descent:
+    description: Dùng skill Dragon Descent
+    default: op
+  astraxultimate.skill.death-domain:
+    description: Dùng skill Death Domain
+    default: op

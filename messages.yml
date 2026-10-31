@@ -1,0 +1,66 @@
+# Thông báo AstraXUltimate. Hỗ trợ mã màu & và hex &#RRGGBB.
+
+prefix: '&8[&5Ultimate&8] &7'
+
+no-permission: '&cBạn không có quyền.'
+only-player: '&cLệnh này chỉ dùng được trong game.'
+unknown-skill: '&cKhông có skill &e{skill}&c.'
+busy: '&cBạn đang thi triển một skill khác.'
+silenced: '&c&lBỊ CÂM LẶNG! &7Bạn không thể thi triển skill.'
+stunned: '&c&lBỊ CHOÁNG! &7Bạn không thể hành động.'
+no-target: '&cKhông tìm thấy mục tiêu (nhìn vào mặt đất/kẻ địch trong tầm).'
+world-disabled: '&cSkill bị tắt ở thế giới này.'
+limit-reached: '&cMáy chủ đang quá tải hiệu ứng, thử lại sau giây lát.'
+interrupted: '&c✖ Skill bị gián đoạn &7({reason})'
+cancelled: '&7Đã hủy skill.'
+nothing-to-cancel: '&cBạn không có skill nào đang chạy.'
+
+# ActionBar khi đang hồi chiêu / sẵn sàng
+cooldown-bar: '{skill} &7⏳ &c{time}s &8[{bar}&8]'
+skill-ready: '&a✔ {skill} &asẵn sàng!'
+bossbar-title: '{skill} &7- &f{time}s'
+
+hit-feedback: '&6✦ &e{targets} mục tiêu &8• &c-{damage} HP'
+crit-feedback: '&6&l✦ CHÍ MẠNG! &e{targets} mục tiêu &8• &c-{damage} HP'
+
+list-header: '&8&m   &5 Ultimate Skills &8&m   '
+list-line: '{name} &8(&7{id}&8) {status}'
+list-ready: '&a[Sẵn sàng]'
+list-cooldown: '&c[{time}s]'
+list-nopermission: '&8[Khóa]'
+
+info:
+  - '&8&m   &r {name} &8&m   '
+  - '&7ID: &f{id} &8| &7Loại: &f{type}'
+  - '&7Hồi chiêu: &c{cooldown}s &8| &7Tầm: &f{range} block'
+  - '&7Tiến hóa: &f{evolution}'
+
+bound: '&aĐã gắn skill {skill} &avào vật phẩm đang cầm. Chuột phải để thi triển.'
+unbound: '&7Đã gỡ skill khỏi vật phẩm.'
+no-item: '&cHãy cầm một vật phẩm trên tay.'
+not-bound: '&cVật phẩm này chưa gắn skill.'
+wand-given: '&aĐã đưa gậy skill {skill} &acho &e{player}&a.'
+
+evolve-ok: '&6&l★ TIẾN HÓA! &r{from} &7→ &r{to}'
+evolve-none: '&cSkill này không có dạng tiến hóa.'
+evolve-already: '&cBạn đã tiến hóa skill này rồi.'
+evolve-cost: '&cCần &e{cost} &ccấp kinh nghiệm để tiến hóa (bạn có {have}).'
+devolved: '&7Đã đưa skill &e{skill} &7về dạng gốc cho &e{player}&7.'
+
+player-offline: '&cNgười chơi không trực tuyến.'
+usage: '&cDùng: &e{usage}'
+reloaded: '&aĐã tải lại cấu hình ({count} skill).'
+quality-set: '&aĐã đặt chất lượng hiệu ứng: &e{quality}'
+invalid-quality: '&cMức hợp lệ: LOW, MEDIUM, HIGH, ULTRA.'
+cooldowns-reset: '&aĐã đặt lại hồi chiêu của &e{player}&a.'
+
+help:
+  - '&8&m   &5 AstraXUltimate &8&m   '
+  - '&e/ult list &7- Danh sách skill'
+  - '&e/ult info <skill> &7- Thông tin skill'
+  - '&e/ult cast <skill> &7- Thi triển skill (nhìn vào mục tiêu)'
+  - '&e/ult bind <skill> &7- Gắn skill vào vật phẩm đang cầm'
+  - '&e/ult unbind &7- Gỡ skill khỏi vật phẩm'
+  - '&e/ult evolve <skill> &7- Tiến hóa skill'
+  - '&e/ult cancel &7- Hủy skill đang thi triển'
+  - '&c/ult reload | quality <mức> | wand <skill> [người] | resetcd <người> | devolve <người> <skill>'

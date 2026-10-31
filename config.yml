@@ -1,0 +1,74 @@
+# ============================================================
+#  AstraXUltimate - cấu hình chung
+#  Định nghĩa từng skill nằm trong skills.yml. Sau khi sửa dùng /ult reload
+# ============================================================
+
+# Chất lượng hiệu ứng: LOW | MEDIUM | HIGH | ULTRA (đổi nhanh: /ult quality <mức>)
+effects-quality: HIGH
+
+quality:
+  LOW:
+    density: 0.30        # nhân mật độ particle của mọi layer
+    budget: 250          # số lệnh spawn particle tối đa mỗi tick (toàn server)
+    layer-interval: 2    # chỉ vẽ layer mỗi N tick (nhân với interval của layer)
+    camera-shake: false
+  MEDIUM:
+    density: 0.60
+    budget: 600
+    layer-interval: 1
+    camera-shake: true
+  HIGH:
+    density: 1.00
+    budget: 1200
+    layer-interval: 1
+    camera-shake: true
+  ULTRA:
+    density: 1.60
+    budget: 2400
+    layer-interval: 1
+    camera-shake: true
+
+# Tự giảm chất lượng khi server đông người (không đổi cấu hình, chỉ nhân hệ số)
+auto-scale:
+  enabled: true
+  players-threshold: 40   # trên ngưỡng này bắt đầu giảm mật độ/ngân sách particle
+  min-factor: 0.4         # giảm tối đa còn 40%
+
+limits:
+  max-concurrent-runs: 30       # số skill chạy cùng lúc toàn server
+  max-targets-per-hit: 30       # tối đa số mục tiêu bị ảnh hưởng mỗi đòn
+  max-run-ticks: 900            # tự hủy skill nếu chạy quá lâu (an toàn chống vòng lặp)
+  max-damage-indicators: 12     # số số-sát-thương nổi tối đa mỗi đòn
+
+# Không bao giờ phá block: skill chỉ dùng particle/âm thanh/sát thương. Danh sách thế giới tắt skill:
+disabled-worlds: []
+
+combat:
+  damage-multiplier: 1.0        # nhân sát thương mọi skill (cân bằng toàn server)
+  ignore-invulnerability-frames: true   # đòn nhiều đợt/pulse vẫn trúng liên tục
+  damage-indicators: true       # số sát thương nổi trên đầu mục tiêu
+
+cooldown:
+  show-bossbar: true            # BossBar thanh hồi chiêu
+  bar-color: PURPLE             # PINK | BLUE | RED | GREEN | YELLOW | PURPLE | WHITE
+  bar-overlay: PROGRESS         # PROGRESS | NOTCHED_6 | NOTCHED_10 | NOTCHED_12 | NOTCHED_20
+  ready-sound: entity.experience_orb.pickup
+  cancel-penalty-seconds: 5     # nếu bị hủy trước khi Impact: cooldown còn tối đa bấy nhiêu giây
+
+# Vật phẩm "gậy kỹ năng" tạo bằng /ult wand
+wand:
+  material: BLAZE_ROD
+  name: '{skill}'
+  lore:
+    - '&7Chuột phải để thi triển'
+    - '&8Skill gắn: &f{id}'
+  glow: true
+
+# Hiển thị dấu hiệu (Mark) trên đầu mục tiêu bị đánh dấu
+marks:
+  VOID:
+    particle: DUST
+    color: '#8A2BFF'
+    size: 1.3
+  DEATH:
+    particle: SOUL

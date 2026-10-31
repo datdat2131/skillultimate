@@ -1,0 +1,566 @@
+# ============================================================
+#  AstraXUltimate - định nghĩa Skill (xem README để biết đầy đủ tham số)
+#
+#  Mỗi skill có 4 giai đoạn: cast → charge → impact → after
+#  Mỗi giai đoạn: duration (tick), lock-movement, actionbar, sounds, layers, pulse, shake
+#  impact thêm: radius, combat-delay, combat (hồ sơ chiến đấu)
+#  "extends: <skill khác>" = kế thừa toàn bộ rồi ghi đè các khóa riêng
+#  Layer type: CIRCLE AURA SPIRAL ORBIT CONVERGE SHOCKWAVE SPHERE BEAM LIGHTNING DEBRIS CRATER SMOKE FLASH DOME LINE
+#  Layer at: CASTER | TARGET | SKY | HAND     (trigger: LAND = chỉ bắt đầu khi Dragon Descent chạm đất)
+# ============================================================
+
+skills:
+
+  # ==========================================================
+  #  ☄ METEOR FALL
+  # ==========================================================
+  meteor-fall:
+    type: METEOR_FALL
+    display-name: '&6&l☄ METEOR FALL'
+    description:
+      - '&7Giơ tay triệu hồi thiên thạch khổng lồ từ bầu trời.'
+      - '&7Va chạm: sóng xung kích, nổ bán kính 12, thiêu cháy.'
+    cooldown: 45
+    permission: astraxultimate.skill.meteor-fall
+    sky-height: 30
+    target: {mode: GROUND, range: 50, allow-miss: true}
+    interrupt: {on-damage: false}
+    params:
+      fall-ticks: 16
+      meteor-size: 1.8
+      trail-length: 9
+      slant: 10
+      meteor:
+        core: {particle: DUST, color: '#FF5A00', size: 2.4}
+        glow: {particle: FLAME}
+        trail: {particle: LARGE_SMOKE}
+    cast:
+      duration: 20
+      actionbar: '&6&l☄ METEOR FALL &7- đang triệu hồi...'
+      sounds:
+        cast: {key: entity.blaze.shoot, volume: 1.2, pitch: 0.6}
+        rune: {key: block.enchantment_table.use, volume: 1.0, pitch: 0.7, delay: 4}
+        whoosh: {key: item.firecharge.use, volume: 1.0, pitch: 0.7, delay: 8}
+      layers:
+        hand-circle: {type: CIRCLE, at: CASTER, radius: 2.8, sides: 6, rings: 2, rotate: 8, grow: 8, particle: DUST, color: '#FF7A1A', size: 1.0, accent: {particle: FLAME}}
+        hand-aura: {type: AURA, at: CASTER, radius: 1.2, height: 2.6, particle: FLAME}
+        sky-circle: {type: CIRCLE, at: SKY, radius: 14, sides: 8, rings: 3, rotate: 4, grow: 14, particle: DUST, color: '#FF4500', size: 2.0, accent: {particle: DUST, color: '#FFD27A', size: 1.6}}
+    charge:
+      duration: 44
+      lock-movement: true
+      actionbar: '&c&l☄ THIÊN THẠCH ĐANG RƠI... &7(đừng đứng đó)'
+      sounds:
+        rise: {key: block.beacon.ambient, volume: 1.5, pitch: 0.5, pitch-end: 2.0, interval: 4}
+        growl: {key: entity.ender_dragon.growl, volume: 1.2, pitch: 0.5}
+        crackle: {key: block.fire.ambient, volume: 2.0, pitch: 0.8, interval: 10}
+        whistle: {key: entity.ghast.shoot, volume: 2.0, pitch: 0.5, delay: 28}
+      layers:
+        hand-circle: {type: CIRCLE, at: CASTER, radius: 2.8, sides: 6, rings: 2, rotate: 10, particle: DUST, color: '#FF7A1A', size: 1.0, accent: {particle: FLAME}}
+        sky-circle: {type: CIRCLE, at: SKY, radius: 14, sides: 8, rings: 3, rotate: 6, particle: DUST, color: '#FF4500', size: 2.0, accent: {particle: DUST, color: '#FFD27A', size: 1.6}}
+        ground-warning: {type: CIRCLE, at: TARGET, radius: 12, sides: 5, rings: 2, rotate: -6, particle: DUST, color: '#FF2200', size: 1.2, accent: {particle: SMALL_FLAME}}
+        embers: {type: CONVERGE, at: SKY, radius: 16, swirl: 3.0, flat: true, particle: FLAME}
+        orbit: {type: ORBIT, at: CASTER, offset-y: 1.1, radius: 1.7, rings: 3, rotate: 14, particle: DUST, color: '#FFAA33', size: 0.9}
+        warning-beam: {type: BEAM, at: TARGET, radius: 1.0, height: 12, delay: 20, particle: DUST, color: '#FF6600', size: 1.0, accent: {particle: FLAME}}
+    impact:
+      duration: 40
+      radius: 12
+      combat-delay: 0
+      shake: {radius: 35, duration: 18, intensity: 2.8}
+      combat:
+        damage: 45
+        falloff: 0.35
+        crit: {chance: 0.2, multiplier: 1.6}
+        true-damage: 0.1
+        armor-penetration: 0.2
+        knockback: {strength: 2.2, lift: 0.9, mode: RADIAL}
+        burn: 160
+        stun: 20
+        execute: {threshold: 0.12, multiplier: 1.5}
+        shield-break: 120
+        max-targets: 30
+      sounds:
+        boom: {key: entity.generic.explode, volume: 4.0, pitch: 0.5}
+        rock: {key: block.stone.break, volume: 3.0, pitch: 0.5, delay: 1}
+        thunder: {key: entity.lightning_bolt.thunder, volume: 3.0, pitch: 0.6, delay: 2}
+        rumble: {key: entity.iron_golem.death, volume: 2.0, pitch: 0.5, delay: 3}
+        boom2: {key: entity.generic.explode, volume: 3.0, pitch: 0.8, delay: 5}
+      layers:
+        flash: {type: FLASH, at: TARGET, radius: 5, duration: 3, particle: DUST, color: '#FFF2D0', size: 2.0, accent: {particle: FLASH}}
+        core: {type: SPHERE, at: TARGET, offset-y: 1, radius: 7, duration: 8, particle: DUST, color: '#FF8A00', size: 2.5}
+        explosion: {type: SPHERE, at: TARGET, offset-y: 1, radius: 12, duration: 10, density: 1.4, particle: FLAME}
+        shock1: {type: SHOCKWAVE, at: TARGET, radius: 12, rings: 3, duration: 12, particle: DUST, color: '#FFB060', size: 1.6}
+        shock2: {type: SHOCKWAVE, at: TARGET, radius: 12, rings: 2, duration: 12, delay: 3, particle: LARGE_SMOKE}
+        pillar: {type: BEAM, at: TARGET, radius: 3, height: 14, duration: 12, particle: FLAME, accent: {particle: DUST, color: '#FF9A30', size: 1.8}}
+        debris-magma: {type: DEBRIS, at: TARGET, radius: 8, duration: 14, density: 1.5, particle: BLOCK, block: MAGMA_BLOCK}
+        debris-stone: {type: DEBRIS, at: TARGET, radius: 8, duration: 14, delay: 2, particle: BLOCK, block: STONE}
+        smoke: {type: SMOKE, at: TARGET, radius: 8, duration: 30, density: 1.2, particle: LARGE_SMOKE}
+        crater: {type: CRATER, at: TARGET, radius: 10, duration: 36, delay: 2, strands: 8, particle: DUST, color: '#1A0E08', size: 1.8, accent: {particle: DUST, color: '#FF5A00', size: 1.0}}
+    after:
+      duration: 100
+      sounds:
+        fire: {key: block.fire.ambient, volume: 2.0, pitch: 0.8, interval: 15}
+      layers:
+        flames: {type: AURA, at: TARGET, radius: 10, height: 1.5, fade: true, particle: FLAME}
+        embers: {type: DEBRIS, at: TARGET, radius: 8, fade: true, particle: LAVA}
+        smoke: {type: SMOKE, at: TARGET, radius: 9, fade: true, particle: LARGE_SMOKE}
+        crater-glow: {type: CRATER, at: TARGET, radius: 10, fade: true, interval: 8, strands: 8, particle: DUST, color: '#2A1008', size: 1.4, accent: {particle: DUST, color: '#FF4A00', size: 0.9}}
+      pulse:
+        interval: 10
+        radius: 11
+        at: TARGET
+        combat: {damage: 5, burn: 60, indicators: false}
+
+  # ==========================================================
+  #  ⚡ THUNDER JUDGEMENT  (→ DIVINE THUNDER)
+  # ==========================================================
+  thunder-judgement:
+    type: THUNDER_JUDGEMENT
+    display-name: '&b&l⚡ THUNDER JUDGEMENT'
+    description:
+      - '&7Chỉ tay vào mục tiêu: vòng ma pháp hiện dưới chân,'
+      - '&7sét giáng xuống kèm chain lightning sang kẻ địch gần đó.'
+      - '&8Tiến hóa: DIVINE THUNDER (/ult evolve thunder-judgement)'
+    cooldown: 30
+    permission: astraxultimate.skill.thunder-judgement
+    evolution: divine-thunder
+    evolve-cost: 30
+    sky-height: 30
+    target: {mode: ENTITY, range: 40, allow-miss: true, track: true}
+    interrupt: {on-damage: false}
+    params:
+      chain:
+        jumps: 5
+        range: 9
+        interval: 4
+        damage-factor: 0.75
+        sound: entity.lightning_bolt.impact
+        arc: {particle: ELECTRIC_SPARK}
+        arc-core: {particle: DUST, color: '#FFFFFF', size: 0.8}
+    cast:
+      duration: 16
+      actionbar: '&b&l⚡ THUNDER JUDGEMENT &7- khóa mục tiêu...'
+      sounds:
+        cast: {key: entity.lightning_bolt.thunder, volume: 0.8, pitch: 1.6}
+        charge: {key: block.beacon.activate, volume: 1.0, pitch: 1.8, delay: 3}
+      layers:
+        point-line: {type: LINE, at: HAND, to: TARGET, jitter: 0.12, particle: ELECTRIC_SPARK}
+        target-circle: {type: CIRCLE, at: TARGET, radius: 4, sides: 6, rings: 2, rotate: 8, grow: 10, particle: DUST, color: '#7AB8FF', size: 1.2, accent: {particle: ELECTRIC_SPARK}}
+        caster-aura: {type: AURA, at: CASTER, radius: 1.0, height: 2.5, particle: ELECTRIC_SPARK}
+    charge:
+      duration: 36
+      lock-movement: true
+      actionbar: '&b&l⚡ SÉT ĐANG TÍCH TỤ...'
+      sounds:
+        rise: {key: block.beacon.power_select, volume: 1.5, pitch: 0.6, pitch-end: 2.0, interval: 3}
+        rumble: {key: entity.lightning_bolt.thunder, volume: 1.2, pitch: 0.5}
+        crackle: {key: entity.lightning_bolt.impact, volume: 0.6, pitch: 1.9, interval: 8, delay: 8}
+      layers:
+        point-line: {type: LINE, at: HAND, to: TARGET, jitter: 0.15, particle: ELECTRIC_SPARK}
+        target-circle: {type: CIRCLE, at: TARGET, radius: 6, sides: 6, rings: 3, rotate: 14, particle: DUST, color: '#7AB8FF', size: 1.3, accent: {particle: ELECTRIC_SPARK}}
+        sparks: {type: CONVERGE, at: TARGET, radius: 7, swirl: 4.0, flat: true, particle: ELECTRIC_SPARK}
+        clouds: {type: AURA, at: SKY, radius: 9, height: 2, density: 2.0, particle: DUST, color: '#2A2A3A', size: 3.0}
+        cloud-flash: {type: AURA, at: SKY, radius: 8, height: 2, particle: ELECTRIC_SPARK}
+        warning-beam: {type: BEAM, at: TARGET, radius: 0.5, height: 30, delay: 12, particle: DUST, color: '#9CD0FF', size: 1.0}
+        orbit: {type: ORBIT, at: CASTER, offset-y: 1.1, radius: 1.5, rings: 3, rotate: 16, particle: ELECTRIC_SPARK}
+    impact:
+      duration: 30
+      radius: 6
+      combat-delay: 0
+      shake: {radius: 35, duration: 14, intensity: 2.4}
+      combat:
+        damage: 70
+        falloff: 0.25
+        crit: {chance: 0.25, multiplier: 1.7}
+        true-damage: 0.15
+        armor-penetration: 0.25
+        knockback: {strength: 1.8, lift: 0.8, mode: RADIAL}
+        stun: 20
+        silence: 60
+        execute: {threshold: 0.1, multiplier: 1.5}
+        shield-break: 100
+      sounds:
+        thunder: {key: entity.lightning_bolt.thunder, volume: 5.0, pitch: 1.0}
+        impact: {key: entity.lightning_bolt.impact, volume: 4.0, pitch: 0.9}
+        boom: {key: entity.generic.explode, volume: 2.0, pitch: 1.4, delay: 1}
+      layers:
+        flash: {type: FLASH, at: TARGET, radius: 5, duration: 3, particle: DUST, color: '#FFFFFF', size: 2.0, accent: {particle: FLASH}}
+        bolt: {type: LIGHTNING, at: TARGET, height: 30, duration: 8, strands: 3, branches: 5, jitter: 1.0, particle: ELECTRIC_SPARK, accent: {particle: DUST, color: '#FFFFFF', size: 1.2}}
+        core-beam: {type: BEAM, at: TARGET, radius: 1.2, height: 30, duration: 6, particle: DUST, color: '#BFE3FF', size: 1.8, accent: {particle: END_ROD}}
+        shock1: {type: SHOCKWAVE, at: TARGET, radius: 8, rings: 3, duration: 12, particle: ELECTRIC_SPARK}
+        shock2: {type: SHOCKWAVE, at: TARGET, radius: 8, rings: 2, duration: 12, delay: 2, particle: DUST, color: '#7AB8FF', size: 1.4}
+        burst: {type: SPHERE, at: TARGET, offset-y: 1, radius: 5, duration: 8, particle: ELECTRIC_SPARK}
+        debris: {type: DEBRIS, at: TARGET, radius: 5, duration: 8, particle: BLOCK, block: IRON_BLOCK}
+    after:
+      duration: 60
+      sounds:
+        crackle: {key: entity.lightning_bolt.impact, volume: 0.5, pitch: 2.0, interval: 12}
+      layers:
+        field: {type: AURA, at: TARGET, radius: 5, height: 2, fade: true, particle: ELECTRIC_SPARK}
+        ring: {type: CIRCLE, at: TARGET, radius: 4, rotate: 6, fade: true, interval: 4, particle: DUST, color: '#7AB8FF', size: 0.8}
+      pulse:
+        interval: 10
+        radius: 5
+        at: TARGET
+        combat: {damage: 4, slow: {duration: 20, amplifier: 1}, indicators: false}
+
+  divine-thunder:
+    extends: thunder-judgement
+    display-name: '&e&l⚡ DIVINE THUNDER'
+    description:
+      - '&7Dạng tiến hóa của Thunder Judgement: sét thần giáng xuống'
+      - '&7với sức hủy diệt gấp đôi và chain lightning khắp chiến trường.'
+    evolution: none
+    cooldown: 40
+    permission: astraxultimate.skill.divine-thunder
+    params:
+      chain: {jumps: 8, range: 12, interval: 3, damage-factor: 0.85}
+    cast:
+      actionbar: '&e&l⚡ DIVINE THUNDER &7- thiên phạt giáng xuống...'
+    charge:
+      duration: 40
+      actionbar: '&e&l⚡ THIÊN LÔI ĐANG TÍCH TỤ...'
+      layers:
+        halo: {type: CIRCLE, at: TARGET, radius: 9, sides: 8, rings: 3, rotate: -10, particle: DUST, color: '#FFD84A', size: 1.4, accent: {particle: END_ROD}}
+        golden-sparks: {type: CONVERGE, at: TARGET, radius: 9, swirl: 5.0, flat: true, particle: END_ROD}
+    impact:
+      radius: 9
+      shake: {radius: 45, duration: 20, intensity: 3.0}
+      combat:
+        damage: 120
+        crit: {chance: 0.3, multiplier: 2.0}
+        stun: 40
+        silence: 100
+        knockback: {strength: 2.4, lift: 1.0}
+      layers:
+        golden-bolt: {type: LIGHTNING, at: TARGET, height: 36, duration: 10, strands: 4, branches: 7, jitter: 1.4, particle: DUST, color: '#FFE066', size: 1.4, accent: {particle: END_ROD}}
+        golden-shock: {type: SHOCKWAVE, at: TARGET, radius: 12, rings: 3, duration: 14, delay: 1, particle: DUST, color: '#FFD84A', size: 1.6}
+        golden-burst: {type: SPHERE, at: TARGET, offset-y: 1, radius: 8, duration: 10, particle: END_ROD}
+
+  # ==========================================================
+  #  🌌 VOID BREAKER
+  # ==========================================================
+  void-breaker:
+    type: VOID_BREAKER
+    display-name: '&5&l🌌 VOID BREAKER'
+    description:
+      - '&7Tạo vùng năng lượng hư không hút mọi thứ vào tâm.'
+      - '&7Phát nổ: sát thương, làm chậm, Darkness và Void Mark.'
+      - '&7Mục tiêu đang mang Void Mark nhận thêm sát thương.'
+    cooldown: 35
+    permission: astraxultimate.skill.void-breaker
+    sky-height: 20
+    target: {mode: GROUND, range: 25, allow-miss: true}
+    interrupt: {on-damage: false}
+    params:
+      orb:
+        radius: 1.6
+        height: 2.6
+        core: {particle: DUST, color: '#0A0010', size: 2.2}
+        ring: {particle: DUST_COLOR_TRANSITION, color: '#B45BFF', to-color: '#1A0033', size: 1.2}
+    cast:
+      duration: 16
+      actionbar: '&5&l🌌 VOID BREAKER &7- xé rách không gian...'
+      sounds:
+        cast: {key: entity.enderman.scream, volume: 0.7, pitch: 0.5}
+        portal: {key: block.respawn_anchor.charge, volume: 1.2, pitch: 0.6, delay: 4}
+      layers:
+        caster-circle: {type: CIRCLE, at: CASTER, radius: 2.5, sides: 7, rings: 2, rotate: 8, grow: 8, particle: DUST, color: '#8A2BFF', size: 1.0, accent: {particle: PORTAL}}
+        target-circle: {type: CIRCLE, at: TARGET, radius: 5, sides: 7, rings: 2, rotate: -6, grow: 14, particle: DUST, color: '#5A00B0', size: 1.4, accent: {particle: SQUID_INK}}
+    charge:
+      duration: 50
+      lock-movement: true
+      actionbar: '&5&l🌌 HƯ KHÔNG ĐANG NUỐT CHỬNG...'
+      sounds:
+        rise: {key: block.portal.ambient, volume: 1.6, pitch: 0.5, pitch-end: 2.0, interval: 5}
+        hum: {key: block.beacon.ambient, volume: 1.4, pitch: 0.5, pitch-end: 1.2, interval: 8}
+        whisper: {key: entity.enderman.stare, volume: 0.8, pitch: 0.5, delay: 20}
+      layers:
+        target-circle: {type: CIRCLE, at: TARGET, radius: 9, sides: 7, rings: 3, rotate: -5, particle: DUST, color: '#5A00B0', size: 1.5, accent: {particle: SQUID_INK}}
+        vortex: {type: CONVERGE, at: TARGET, offset-y: 2.6, radius: 10, swirl: 5.0, flat: true, particle: DUST, color: '#6A00FF', size: 1.2}
+        fragments: {type: CONVERGE, at: TARGET, offset-y: 2.6, radius: 12, swirl: 2.0, speed: 1.4, particle: REVERSE_PORTAL}
+        ink: {type: CONVERGE, at: TARGET, offset-y: 2.6, radius: 8, swirl: 6.0, flat: true, particle: SQUID_INK}
+        dark-aura: {type: AURA, at: TARGET, radius: 8, height: 3, particle: SQUID_INK}
+        caster-orbit: {type: ORBIT, at: CASTER, offset-y: 1.1, radius: 1.5, rings: 3, rotate: 16, particle: DUST, color: '#8A2BFF', size: 0.9}
+      pulse:
+        interval: 6
+        radius: 9
+        at: TARGET
+        combat:
+          knockback: {strength: 0.35, lift: 0.1, mode: PULL}
+          slow: {duration: 20, amplifier: 1}
+          mark: {id: VOID, duration: 240}
+          indicators: false
+    impact:
+      duration: 36
+      radius: 10
+      combat-delay: 12
+      shake: {radius: 40, duration: 16, intensity: 2.6}
+      pulse:
+        interval: 2
+        until: 12
+        radius: 10
+        at: TARGET
+        combat:
+          knockback: {strength: 0.9, lift: 0.0, mode: PULL}
+          indicators: false
+      combat:
+        damage: 55
+        falloff: 0.3
+        crit: {chance: 0.2, multiplier: 1.6}
+        true-damage: 0.15
+        armor-penetration: 0.3
+        knockback: {strength: 1.5, lift: 0.6, mode: RADIAL}
+        slow: {duration: 80, amplifier: 2}
+        darkness: 100
+        mark: {id: VOID, duration: 240}
+        consume-mark: {id: VOID, bonus: 0.6}
+        execute: {threshold: 0.12, multiplier: 1.5}
+      sounds:
+        collapse: {key: entity.enderman.teleport, volume: 2.0, pitch: 0.5}
+        suck: {key: block.portal.travel, volume: 1.5, pitch: 0.6}
+        boom: {key: entity.generic.explode, volume: 4.0, pitch: 0.5, delay: 12}
+        scream: {key: entity.warden.sonic_boom, volume: 2.0, pitch: 0.7, delay: 12}
+        rumble: {key: entity.wither.break_block, volume: 2.0, pitch: 0.6, delay: 14}
+      layers:
+        collapse: {type: CONVERGE, at: TARGET, offset-y: 2.0, radius: 10, duration: 12, swirl: 6.0, speed: 2.5, particle: DUST_COLOR_TRANSITION, color: '#B45BFF', to-color: '#000000', size: 1.4}
+        collapse-portal: {type: CONVERGE, at: TARGET, offset-y: 2.0, radius: 10, duration: 12, speed: 2.5, particle: REVERSE_PORTAL}
+        flash: {type: FLASH, at: TARGET, radius: 5, duration: 3, delay: 12, particle: DUST, color: '#D9B8FF', size: 2.0, accent: {particle: FLASH}}
+        explosion: {type: SPHERE, at: TARGET, offset-y: 2.0, radius: 10, duration: 12, delay: 12, particle: DUST_COLOR_TRANSITION, color: '#8A2BFF', to-color: '#0A0010', size: 1.8}
+        explosion-portal: {type: SPHERE, at: TARGET, offset-y: 2.0, radius: 9, duration: 12, delay: 12, particle: PORTAL}
+        shock1: {type: SHOCKWAVE, at: TARGET, radius: 10, rings: 3, duration: 12, delay: 12, particle: DUST, color: '#7A2CFF', size: 1.6}
+        shock2: {type: SHOCKWAVE, at: TARGET, radius: 10, rings: 2, duration: 12, delay: 15, particle: SQUID_INK}
+        beam: {type: BEAM, at: TARGET, radius: 2.0, height: 14, duration: 10, delay: 12, particle: DUST, color: '#2A0050', size: 1.8, accent: {particle: END_ROD}}
+        debris: {type: DEBRIS, at: TARGET, radius: 7, duration: 12, delay: 12, density: 1.3, particle: BLOCK, block: OBSIDIAN}
+        smoke: {type: SMOKE, at: TARGET, radius: 7, duration: 24, delay: 14, particle: SQUID_INK}
+    after:
+      duration: 80
+      sounds:
+        drone: {key: block.portal.ambient, volume: 1.2, pitch: 0.6, interval: 20}
+      layers:
+        field: {type: AURA, at: TARGET, radius: 9, height: 2.5, fade: true, particle: SQUID_INK}
+        souls: {type: AURA, at: TARGET, radius: 8, height: 3, fade: true, particle: SOUL}
+        ring: {type: CIRCLE, at: TARGET, radius: 9, sides: 7, rotate: -4, fade: true, interval: 4, particle: DUST, color: '#5A00B0', size: 1.0}
+      pulse:
+        interval: 10
+        radius: 9
+        at: TARGET
+        combat:
+          damage: 4
+          slow: {duration: 30, amplifier: 1}
+          mark: {id: VOID, duration: 160}
+          indicators: false
+
+  # ==========================================================
+  #  🐉 DRAGON DESCENT
+  # ==========================================================
+  dragon-descent:
+    type: DRAGON_DESCENT
+    display-name: '&c&l🐉 DRAGON DESCENT'
+    description:
+      - '&7Bay vút lên không, rồng năng lượng hiện sau lưng.'
+      - '&7Lao thẳng xuống đất: DRAGON SHOCKWAVE quét theo hướng nhìn.'
+    cooldown: 50
+    permission: astraxultimate.skill.dragon-descent
+    sky-height: 20
+    target: {mode: GROUND, range: 45, allow-miss: true}
+    interrupt: {on-damage: false}
+    params:
+      launch: 1.3
+      dive-speed: 1.9
+      dive-max-ticks: 50
+      dragon:
+        scale: 1.2
+        body: {particle: DUST, color: '#FF3A00', size: 1.5}
+        wing: {particle: DUST, color: '#FF8A2A', size: 1.2}
+        eye: {particle: END_ROD}
+        fire: {particle: FLAME}
+      blast:
+        range: 28
+        ticks: 22
+        radius: 3.4
+        sound: entity.ender_dragon.growl
+        combat:
+          damage: 28
+          crit: {chance: 0.2, multiplier: 1.5}
+          armor-penetration: 0.2
+          knockback: {strength: 1.6, lift: 0.7, mode: DIRECTIONAL}
+          burn: 140
+    cast:
+      duration: 14
+      actionbar: '&c&l🐉 DRAGON DESCENT &7- bay lên!'
+      sounds:
+        flap: {key: entity.ender_dragon.flap, volume: 1.5, pitch: 0.9}
+        growl: {key: entity.ender_dragon.growl, volume: 1.0, pitch: 1.0, delay: 3}
+      layers:
+        circle: {type: CIRCLE, at: CASTER, radius: 3.5, sides: 6, rings: 3, rotate: 10, particle: DUST, color: '#FF5A1A', size: 1.2, accent: {particle: FLAME}}
+        updraft: {type: SPIRAL, at: CASTER, radius: 1.2, height: 3.0, strands: 3, particle: FLAME}
+    charge:
+      duration: 40
+      actionbar: '&c&l🐉 RỒNG ĐANG THỨC TỈNH...'
+      sounds:
+        rise: {key: entity.ender_dragon.growl, volume: 1.4, pitch: 0.5, pitch-end: 1.4, interval: 8}
+        flap: {key: entity.ender_dragon.flap, volume: 1.2, pitch: 0.8, interval: 10}
+        fire: {key: item.firecharge.use, volume: 1.0, pitch: 0.6, interval: 6, delay: 10}
+      layers:
+        orbit: {type: ORBIT, at: CASTER, offset-y: 1.0, radius: 1.8, rings: 3, rotate: 14, particle: DUST, color: '#FF7A2A', size: 1.0}
+        gather: {type: CONVERGE, at: CASTER, offset-y: 1.0, radius: 8, swirl: 3.0, speed: 1.5, particle: FLAME}
+        marker: {type: CIRCLE, at: TARGET, radius: 10, sides: 5, rings: 2, rotate: -6, particle: DUST, color: '#FF2200', size: 1.2, accent: {particle: SMALL_FLAME}}
+    impact:
+      duration: 100
+      radius: 10
+      shake: {radius: 40, duration: 18, intensity: 2.6}
+      combat:
+        damage: 65
+        falloff: 0.3
+        crit: {chance: 0.2, multiplier: 1.6}
+        true-damage: 0.1
+        armor-penetration: 0.25
+        knockback: {strength: 2.0, lift: 0.9, mode: RADIAL}
+        burn: 160
+        stun: 15
+        shield-break: 100
+      sounds:
+        dive: {key: entity.ender_dragon.growl, volume: 2.0, pitch: 1.2}
+        whoosh: {key: item.elytra.flying, volume: 1.5, pitch: 1.2, interval: 4}
+        boom: {key: entity.generic.explode, volume: 4.0, pitch: 0.6, trigger: LAND}
+        thunder: {key: entity.lightning_bolt.thunder, volume: 3.0, pitch: 0.7, trigger: LAND, delay: 2}
+        roar: {key: entity.ender_dragon.death, volume: 2.0, pitch: 1.4, trigger: LAND, delay: 4}
+      layers:
+        dive-trail: {type: AURA, at: CASTER, radius: 0.9, height: 2.0, duration: 40, density: 3.0, particle: FLAME}
+        dive-sparks: {type: AURA, at: CASTER, radius: 1.1, height: 2.0, duration: 40, particle: LARGE_SMOKE}
+        flash: {type: FLASH, at: TARGET, radius: 5, duration: 3, trigger: LAND, particle: DUST, color: '#FFE2B0', size: 2.0, accent: {particle: FLASH}}
+        shock1: {type: SHOCKWAVE, at: TARGET, radius: 10, rings: 3, duration: 12, trigger: LAND, particle: DUST, color: '#FF8A30', size: 1.6}
+        shock2: {type: SHOCKWAVE, at: TARGET, radius: 10, rings: 2, duration: 12, delay: 3, trigger: LAND, particle: LARGE_SMOKE}
+        burst: {type: SPHERE, at: TARGET, offset-y: 1, radius: 9, duration: 10, trigger: LAND, particle: FLAME}
+        pillar: {type: BEAM, at: TARGET, radius: 2.5, height: 12, duration: 12, trigger: LAND, particle: FLAME, accent: {particle: DUST, color: '#FFAA40', size: 1.6}}
+        debris: {type: DEBRIS, at: TARGET, radius: 7, duration: 14, trigger: LAND, density: 1.4, particle: BLOCK, block: MAGMA_BLOCK}
+        crater: {type: CRATER, at: TARGET, radius: 8, duration: 30, delay: 2, trigger: LAND, strands: 7, particle: DUST, color: '#1A0E08', size: 1.6, accent: {particle: DUST, color: '#FF5A00', size: 1.0}}
+        fire-ring: {type: CIRCLE, at: TARGET, radius: 7, sides: 6, rings: 2, rotate: 10, duration: 30, trigger: LAND, particle: FLAME}
+    after:
+      duration: 70
+      sounds:
+        fire: {key: block.fire.ambient, volume: 2.0, pitch: 0.8, interval: 15}
+      layers:
+        flames: {type: AURA, at: TARGET, radius: 8, height: 1.5, fade: true, particle: FLAME}
+        smoke: {type: SMOKE, at: TARGET, radius: 7, fade: true, particle: LARGE_SMOKE}
+        ring: {type: CIRCLE, at: TARGET, radius: 7, rotate: 4, fade: true, interval: 4, particle: DUST, color: '#FF5A1A', size: 1.0}
+      pulse:
+        interval: 10
+        radius: 8
+        at: TARGET
+        combat: {damage: 5, burn: 80, indicators: false}
+
+  # ==========================================================
+  #  💀 DEATH DOMAIN
+  # ==========================================================
+  death-domain:
+    type: DEATH_DOMAIN
+    display-name: '&8&l💀 DEATH DOMAIN'
+    description:
+      - '&7Triển khai lãnh địa tử thần bán kính 15: kẻ địch bị làm chậm'
+      - '&7và tối sầm, bạn được tăng sức mạnh. Hết giờ, lãnh địa sụp đổ'
+      - '&7hút mọi thứ vào tâm rồi phát nổ.'
+    cooldown: 75
+    permission: astraxultimate.skill.death-domain
+    sky-height: 12
+    target: {mode: SELF}
+    interrupt: {on-damage: false}
+    params:
+      radius: 15
+      warning: '&8&l💀 DEATH DOMAIN &7- sức mạnh của bạn bị bóp nghẹt'
+    cast:
+      duration: 20
+      actionbar: '&8&l💀 DEATH DOMAIN &7- mở lãnh địa...'
+      sounds:
+        cast: {key: entity.wither.spawn, volume: 1.4, pitch: 0.6}
+        toll: {key: block.bell.use, volume: 2.0, pitch: 0.5, delay: 6}
+      layers:
+        circle: {type: CIRCLE, at: TARGET, radius: 15, sides: 8, rings: 3, rotate: 5, grow: 18, particle: DUST, color: '#3A0060', size: 1.6, accent: {particle: SQUID_INK}}
+        aura: {type: AURA, at: CASTER, radius: 1.4, height: 2.6, particle: SOUL}
+    charge:
+      duration: 120
+      actionbar: '&8&l💀 LÃNH ĐỊA ĐANG HOẠT ĐỘNG...'
+      sounds:
+        ambience: {key: ambient.cave, volume: 1.5, pitch: 0.7, interval: 40}
+        wither: {key: entity.wither.ambient, volume: 1.2, pitch: 0.5, interval: 30}
+        heart: {key: block.note_block.basedrum, volume: 1.5, pitch: 0.5, pitch-end: 1.2, interval: 10}
+      layers:
+        dome: {type: DOME, at: TARGET, radius: 15, grow: 24, particle: DUST, color: '#0A0010', size: 2.5, accent: {particle: SOUL}}
+        ground: {type: CIRCLE, at: TARGET, radius: 15, sides: 8, rings: 3, rotate: 5, interval: 3, particle: DUST, color: '#3A0060', size: 1.4, accent: {particle: SQUID_INK}}
+        fog: {type: SMOKE, at: TARGET, radius: 14, density: 2.0, particle: SQUID_INK}
+        souls: {type: AURA, at: TARGET, radius: 14, height: 6, particle: SOUL}
+        caster-aura: {type: AURA, at: CASTER, radius: 1.3, height: 2.6, particle: DUST, color: '#9A3CFF', size: 1.0}
+      pulse:
+        interval: 10
+        radius: 15
+        at: TARGET
+        combat:
+          damage: 3
+          slow: {duration: 30, amplifier: 2}
+          darkness: 60
+          indicators: false
+        caster-effects:
+          - {type: STRENGTH, duration: 40, amplifier: 1}
+          - {type: SPEED, duration: 40, amplifier: 0}
+    impact:
+      duration: 40
+      radius: 15
+      combat-delay: 16
+      shake: {radius: 45, duration: 18, intensity: 2.8}
+      pulse:
+        interval: 2
+        until: 16
+        radius: 15
+        at: TARGET
+        combat:
+          knockback: {strength: 1.1, lift: 0.0, mode: PULL}
+          indicators: false
+      combat:
+        damage: 90
+        falloff: 0.3
+        crit: {chance: 0.2, multiplier: 1.7}
+        true-damage: 0.25
+        armor-penetration: 0.4
+        knockback: {strength: 2.0, lift: 0.9, mode: RADIAL}
+        stun: 30
+        silence: 120
+        slow: {duration: 100, amplifier: 2}
+        darkness: 120
+        mark: {id: DEATH, duration: 200}
+        execute: {threshold: 0.15, multiplier: 2.0}
+        shield-break: 140
+      sounds:
+        collapse: {key: entity.wither.break_block, volume: 2.5, pitch: 0.5}
+        suck: {key: block.portal.travel, volume: 1.5, pitch: 0.5}
+        boom: {key: entity.generic.explode, volume: 4.0, pitch: 0.5, delay: 16}
+        death: {key: entity.wither.death, volume: 2.5, pitch: 0.7, delay: 16}
+        toll: {key: block.bell.use, volume: 3.0, pitch: 0.5, delay: 18}
+      layers:
+        collapse: {type: CONVERGE, at: TARGET, offset-y: 2.0, radius: 15, duration: 16, swirl: 6.0, speed: 3.0, particle: DUST, color: '#5A00B0', size: 1.6}
+        collapse-souls: {type: CONVERGE, at: TARGET, offset-y: 2.0, radius: 15, duration: 16, speed: 3.0, particle: SOUL}
+        flash: {type: FLASH, at: TARGET, radius: 6, duration: 3, delay: 16, particle: DUST, color: '#C9A0FF', size: 2.2, accent: {particle: FLASH}}
+        explosion: {type: SPHERE, at: TARGET, offset-y: 2.0, radius: 15, duration: 14, delay: 16, particle: DUST_COLOR_TRANSITION, color: '#7A2CFF', to-color: '#000000', size: 2.0}
+        soul-burst: {type: SPHERE, at: TARGET, offset-y: 2.0, radius: 14, duration: 14, delay: 16, particle: SOUL_FIRE_FLAME}
+        shock1: {type: SHOCKWAVE, at: TARGET, radius: 15, rings: 3, duration: 14, delay: 16, particle: SOUL_FIRE_FLAME}
+        shock2: {type: SHOCKWAVE, at: TARGET, radius: 15, rings: 2, duration: 14, delay: 19, particle: DUST, color: '#3A0060', size: 1.8}
+        beam: {type: BEAM, at: TARGET, radius: 2.5, height: 16, duration: 12, delay: 16, particle: DUST, color: '#1A0033', size: 2.0, accent: {particle: SOUL}}
+        debris: {type: DEBRIS, at: TARGET, radius: 9, duration: 14, delay: 16, density: 1.4, particle: BLOCK, block: CRYING_OBSIDIAN}
+        smoke: {type: SMOKE, at: TARGET, radius: 10, duration: 24, delay: 18, particle: SQUID_INK}
+    after:
+      duration: 80
+      sounds:
+        drone: {key: ambient.cave, volume: 1.5, pitch: 0.6, interval: 30}
+      layers:
+        mist: {type: SMOKE, at: TARGET, radius: 12, fade: true, particle: SQUID_INK}
+        souls: {type: AURA, at: TARGET, radius: 12, height: 4, fade: true, particle: SOUL}
+        ring: {type: CIRCLE, at: TARGET, radius: 12, sides: 8, rotate: -3, fade: true, interval: 4, particle: DUST, color: '#3A0060', size: 1.0}
+      pulse:
+        interval: 10
+        radius: 12
+        at: TARGET
+        combat:
+          damage: 4
+          slow: {duration: 30, amplifier: 1}
+          effects:
+            - {type: WITHER, duration: 40, amplifier: 0}
+          indicators: false
